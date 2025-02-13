@@ -14,10 +14,15 @@ export class JwtMiddleware implements NestMiddleware {
 
     const token = authHeader.split(' ')[1];
     try {
+
       const decoded = this.jwtService.verify(token);
       req.user = decoded;
+      
+      console.log('Alguém está tentando acessar a rota');
+      console.log(decoded);
       next();
     } catch (err) {
+      console.log(err);
       throw new UnauthorizedException('Invalid token');
     }
   }

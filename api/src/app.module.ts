@@ -1,9 +1,9 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtAuthService } from './services/auth/index.service';
 import { AuthModule } from './auth/auth.module';
-import { JwtMiddleware } from './auth/jwt.middleware';
+import { JwtMiddleware } from './middlewares/auth/index.middleware';
 
 @Module({
   imports: [AuthModule],
@@ -12,6 +12,9 @@ import { JwtMiddleware } from './auth/jwt.middleware';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes('*');
+    consumer.apply(JwtMiddleware).exclude({
+      path: 'login',
+      method: RequestMethod.POST,
+    }).forRoutes('*');
   }
 }

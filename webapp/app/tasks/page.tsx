@@ -15,19 +15,33 @@ export default function TasksPage() {
   const [newTask, setNewTask] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
 
-  const addTask = () => {
+  const addTask = async () => {
     if (newTask.trim() && selectedDate) {
-      setTasks([
-        ...tasks,
-        {
-          id: Date.now(),
-          title: newTask,
-          date: selectedDate,
-          completed: false,
+      const task = {
+        id: Date.now(),
+        title: newTask,
+        date: selectedDate,
+        completed: false,
+      }
+
+      // Enviar a tarefa para a API
+      const response = await fetch('http://localhost:3333/task', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adicionar o token JWT
         },
-      ])
-      setNewTask("")
-      setSelectedDate("")
+        body: JSON.stringify(task),
+      })
+
+      if (response.ok) {
+        // Adicionar a tarefa ao array local
+        setTasks([...tasks, task])
+        setNewTask("")
+        setSelectedDate("")
+      } else {
+        alert('Failed to add task')
+      }
     }
   }
 

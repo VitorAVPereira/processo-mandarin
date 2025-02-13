@@ -13,6 +13,6 @@ import { JwtAuthService } from 'src/services/auth/index.service';
     }),
   ],
   providers: [JwtAuthService, JwtStrategy],
-  exports: [JwtAuthService],
+  exports: [JwtAuthService, JwtModule],
 })
 export class AuthModule {}
