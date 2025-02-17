@@ -1,5 +1,4 @@
 'use client'
-import Link from "next/link"
 import { useState } from "react"
 
 export default function Home() {
@@ -8,7 +7,7 @@ export default function Home() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    const response = await fetch('http://localhost:3333/login', {
+    const response = await fetch('http://localhost:3003/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

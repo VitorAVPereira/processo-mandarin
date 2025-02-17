@@ -25,7 +25,7 @@ export default function TasksPage() {
       }
 
       // Enviar a tarefa para a API
-      const response = await fetch('http://localhost:3333/task', {
+      const response = await fetch('http://localhost:3003/task', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
