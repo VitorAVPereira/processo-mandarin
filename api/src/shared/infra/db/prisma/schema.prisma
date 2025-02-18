@@ -16,9 +16,9 @@ datasource db {
 
 model Task {
   id              Int      @id @default(autoincrement())
-  name            String
+  name            String?
   solved          Boolean @default(false)
-  scheduled_for   DateTime
+  scheduled_for   DateTime?
   createdAt       DateTime @default(now())
   createdBy       Int
   updatedAt       DateTime @updatedAt

@@ -7,10 +7,13 @@ export class JwtAuthService {
 
   async generateToken(payload: any): Promise<string> {
     console.log('PAYLOAD: ', payload);
-    return this.jwtService.sign(payload, { expiresIn: '7d', secret: 'secretKey'});
+    return this.jwtService.sign(payload, {
+      expiresIn: '7d',
+      secret: 'secretKey',
+    });
   }
 
   async verifyToken(token: string): Promise<any> {
-    return this.jwtService.verify(token, { secret: 'secretKey'});
+    return this.jwtService.verify(token, { secret: 'secretKey' });
   }
 }
