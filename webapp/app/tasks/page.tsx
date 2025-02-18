@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Calendar, Plus } from "lucide-react"
 
 interface Task {
@@ -14,6 +14,25 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [newTask, setNewTask] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch('http://localhost:3003/tasks', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setTasks(data)
+      } else {
+        alert('Failed to fetch tasks')
+      }
+    }
+
+    fetchTasks()
+  }, [])
 
   const addTask = async () => {
     if (newTask.trim() && selectedDate) {

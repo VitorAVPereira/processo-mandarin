@@ -1,21 +1,16 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { JwtAuthService } from './services/auth/index.service';
-import { AuthModule } from './auth/auth.module';
-import { JwtMiddleware } from './middlewares/auth/index.middleware';
-import { PrismaModule } from './modules/prisma/index.module';
+import { AuthModule } from './modules/auth/index.module';
 import { TaskModule } from './modules/task/index.module';
-import { PrismaService } from './services/prisma/index.service';
+import { UserModule } from './modules/user/index.module';
+import { JwtMiddleware } from './middlewares/auth/index.middleware';
+import { JwtAuthService } from './services/auth/index.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    AuthModule,
-    PrismaModule,
-    TaskModule,
-  ],
+  imports: [AuthModule, TaskModule, UserModule],
   controllers: [AppController],
-  providers: [AppService, JwtAuthService, PrismaService],
+  providers: [JwtAuthService, JwtService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

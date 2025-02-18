@@ -12,4 +12,8 @@ export class TaskRepository {
             data
         });
     }
+
+    async get() {
+        return this.prisma.task.findMany();
+    }
 }

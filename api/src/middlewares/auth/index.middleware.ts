@@ -14,8 +14,7 @@ export class JwtMiddleware implements NestMiddleware {
 
     const token = authHeader.split(' ')[1];
     try {
-
-      const decoded = this.jwtService.verify(token);
+      const decoded = this.jwtService.verify(token, { secret: 'secretKey' });
       req.user = decoded;
       
       console.log('Alguém está tentando acessar a rota');
