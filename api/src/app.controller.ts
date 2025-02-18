@@ -17,17 +17,13 @@ export class AppController {
     const { email, password } = req.body;
     const user = await this.userRepository.findByEmail(email);
 
-    console.log('USER: ', user)
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    /*
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (password !== user.password) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-
-    */
 
     const token = await this.authService.generateToken({ userId: user.id });
     
