@@ -6,7 +6,6 @@ export class JwtAuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async generateToken(payload: any): Promise<string> {
-    console.log('PAYLOAD: ', payload);
     return this.jwtService.sign(payload, {
       expiresIn: '7d',
       secret: 'secretKey',

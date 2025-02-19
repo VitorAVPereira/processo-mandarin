@@ -27,21 +27,14 @@ export class AppController {
     const { email, password } = req.body;
     const user = await this.userRepository.findByEmail(email);
 
-<<<<<<< HEAD
-    console.log('USER: ', user);
-=======
->>>>>>> 1aa40954ca0ac8757a35416e7044a004d2634c28
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-<<<<<<< HEAD
-=======
-    if (password !== user.password) {
+    if (password === user.password) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
->>>>>>> 1aa40954ca0ac8757a35416e7044a004d2634c28
     const token = await this.authService.generateToken({ userId: user.id });
 
     return res.status(200).json({ token });
@@ -80,10 +73,7 @@ export class AppController {
   ): Promise<Response> {
     const { userId: id } = req.user;
 
-    console.log('🚀 ~ AppController ~ id:', id);
-
     const taskExists = await this.taskRepository.findById(parseInt(taskId));
-    console.log("🚀 ~ AppController ~ taskExists:", taskExists)
 
     if (!taskExists) {
       return res.status(404).json({ message: 'Tarefa nao encontrada' });

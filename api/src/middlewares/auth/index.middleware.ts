@@ -24,11 +24,8 @@ export class JwtMiddleware implements NestMiddleware {
       jtwStrategy.validate(decoded);
       req.user = decoded;
 
-      console.log('Alguém está tentando acessar a rota');
-      console.log(decoded);
-      next();
+
     } catch (err) {
-      console.log(err);
       throw new UnauthorizedException('Invalid token');
     }
   }
