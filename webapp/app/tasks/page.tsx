@@ -30,7 +30,6 @@ export default function TasksPage() {
       if (response.ok) {
         const data = await response.json()
         setTasks(data)
-        // Inicializa o estado local dos inputs com os nomes das tarefas
         const inputs = data.reduce((acc: { [key: number]: string }, task: Task) => {
           acc[task.id] = task.name
           return acc

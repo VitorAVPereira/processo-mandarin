@@ -17,12 +17,9 @@ export default function Home() {
 
     if (response.ok) {
       const data = await response.json()
-      // Salvar o token JWT no Local Storage
       localStorage.setItem('token', data.token)
-      // Redirecionar para a página de tarefas
       window.location.href = '/tasks'
     } else {
-      // Tratar erro de login
       alert('Login failed')
     }
   }

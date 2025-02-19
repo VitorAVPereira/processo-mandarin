@@ -32,13 +32,6 @@ export class AppController {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    /*
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    */
-
     const token = await this.authService.generateToken({ userId: user.id });
 
     return res.status(200).json({ token });
@@ -51,13 +44,11 @@ export class AppController {
     @Request() req,
     @Response() res,
   ): Promise<Response> {
-    console.log('🚀 ~ AppController ~ task:', task);
     const result = await this.taskRepository.create({
       name: task.name,
       scheduled_for: task.scheduled_for ? new Date(task.scheduled_for) : null,
       createdBy: req.user.userId,
     });
-    console.log('🚀 ~ AppController ~ result:', result);
 
     return res.status(200).json(result);
   }
@@ -77,8 +68,6 @@ export class AppController {
     @Response() res,
     @Param('id') taskId: string,
   ): Promise<Response> {
-    console.log("🚀 ~ AppController ~ taskId:", taskId)
-    console.log('🚀 ~ AppController ~ task:', task);
     const { userId: id } = req.user;
 
     console.log('🚀 ~ AppController ~ id:', id);
@@ -93,7 +82,6 @@ export class AppController {
     const result = await this.taskRepository.update(parseInt(id), {
       ...task,
     });
-    console.log('🚀 ~ AppController ~ result ~ result:', result);
 
     return res.json(result).status(200);
   }
