@@ -17,12 +17,9 @@ export default function Home() {
 
     if (response.ok) {
       const data = await response.json()
-      // Salvar o token JWT no Local Storage
       localStorage.setItem('token', data.token)
-      // Redirecionar para a página de tarefas
       window.location.href = '/tasks'
     } else {
-      // Tratar erro de login
       alert('Login failed')
     }
   }
@@ -31,8 +28,8 @@ export default function Home() {
     <main className="min-h-screen bg-[#434343] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Task Manager</h1>
-          <p className="text-gray-300">Sign in to manage your tasks</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Manda Tasks</h1>
+          <p className="text-gray-300">Faça login para ver suas tarefas</p>
         </div>
         <form className="bg-white rounded-lg shadow-lg p-6 space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
@@ -43,20 +40,18 @@ export default function Home() {
               type="email"
               id="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E4003F]"
-              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="space-y-2">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
+              Senha
             </label>
             <input
               type="password"
               id="password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E4003F]"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -65,7 +60,7 @@ export default function Home() {
             type="submit"
             className="w-full bg-[#E4003F] text-white py-2 px-4 rounded-md hover:bg-[#E4003F]/90 transition-colors flex items-center justify-center"
           >
-            Sign In
+            Login
           </button>
         </form>
       </div>

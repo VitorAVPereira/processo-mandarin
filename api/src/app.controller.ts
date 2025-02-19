@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, UseGuards, Request, Response } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Response,
+  Patch,
+  Param,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthService } from './services/auth/index.service';
 import { TaskRepository } from './modules/task/repository/task.repository';
@@ -9,7 +19,7 @@ export class AppController {
   constructor(
     private readonly authService: JwtAuthService,
     private readonly taskRepository: TaskRepository,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
   ) {}
 
   @Post('login')
@@ -21,21 +31,26 @@ export class AppController {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    if (password !== user.password) {
+    if (password === user.password) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const token = await this.authService.generateToken({ userId: user.id });
-    
+
     return res.status(200).json({ token });
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('task')
-  async addTask(@Body() task: any, @Request() req, @Response() res): Promise<Response> {
+  async addTask(
+    @Body() task: any,
+    @Request() req,
+    @Response() res,
+  ): Promise<Response> {
     const result = await this.taskRepository.create({
-      name: task.title,
-      scheduled_for: new Date(task.date)
+      name: task.name,
+      scheduled_for: task.scheduled_for ? new Date(task.scheduled_for) : null,
+      createdBy: req.user.userId,
     });
 
     return res.status(200).json(result);
@@ -46,5 +61,28 @@ export class AppController {
   async getTasks(@Response() res): Promise<Response> {
     const result = await this.taskRepository.get();
     return res.status(200).json(result);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('task/:id')
+  async updateTask(
+    @Body() task: any,
+    @Request() req,
+    @Response() res,
+    @Param('id') taskId: string,
+  ): Promise<Response> {
+    const { userId: id } = req.user;
+
+    const taskExists = await this.taskRepository.findById(parseInt(taskId));
+
+    if (!taskExists) {
+      return res.status(404).json({ message: 'Tarefa nao encontrada' });
+    }
+
+    const result = await this.taskRepository.update(parseInt(id), {
+      ...task,
+    });
+
+    return res.json(result).status(200);
   }
 }

@@ -1,6 +1,11 @@
-import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
+import { JwtStrategy } from 'src/auth/jwt.strategy';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
@@ -15,13 +20,12 @@ export class JwtMiddleware implements NestMiddleware {
     const token = authHeader.split(' ')[1];
     try {
       const decoded = this.jwtService.verify(token, { secret: 'secretKey' });
+      const jtwStrategy = new JwtStrategy();
+      jtwStrategy.validate(decoded);
       req.user = decoded;
-      
-      console.log('Alguém está tentando acessar a rota');
-      console.log(decoded);
-      next();
+
+
     } catch (err) {
-      console.log(err);
       throw new UnauthorizedException('Invalid token');
     }
   }
