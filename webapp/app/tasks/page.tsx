@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar, Plus } from "lucide-react"
+import { Calendar, Check, Plus } from "lucide-react"
 
 interface Task {
   id: number
   name: string
   scheduled_for: string
   solved: boolean
-  created_by?: {
+  created_by: {
     name: string
   }
 }
@@ -30,11 +30,7 @@ export default function TasksPage() {
       if (response.ok) {
         const data = await response.json()
         setTasks(data)
-        const inputs = data.reduce((acc: { [key: number]: string }, task: Task) => {
-          acc[task.id] = task.name
-          return acc
-        }, {})
-        setTaskInputs(inputs)
+
       } else {
         alert('Failed to fetch tasks')
       }
@@ -88,7 +84,8 @@ export default function TasksPage() {
 
   const updateTaskName = async (taskId: number) => {
     const updatedName = taskInputs[taskId]
-    const response = await fetch(`http://localhost:3003/task/${taskId}`, {
+    if(updatedName && updatedName.trim() !== "") {
+      const response = await fetch(`http://localhost:3001/task/${taskId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -104,6 +101,8 @@ export default function TasksPage() {
     } else {
       alert('Falha ao atualizar o nome da tarefa')
     }
+    }
+
   }
 
   return (
@@ -164,7 +163,8 @@ export default function TasksPage() {
                       value={taskInputs[task.id] || ""}
                       onChange={(e) => handleTaskInputChange(task.id, e.target.value)}
                       onBlur={() => updateTaskName(task.id)}
-                      onKeyPress={(e) => {
+                      placeholder="Change the task name!"
+                      onKeyUp={(e) => {
                         if (e.key === "Enter") {
                           updateTaskName(task.id)
                         }

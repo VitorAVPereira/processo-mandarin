@@ -80,7 +80,7 @@ export class AppController {
       return res.status(404).json({ message: 'Tarefa nao encontrada' });
     }
 
-    const result = await this.taskRepository.update(parseInt(id), {
+    const result = await this.taskRepository.update(parseInt(taskId), {
       ...task,
     });
 
