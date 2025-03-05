@@ -72,8 +72,6 @@ export class AppController {
     @Response() res,
     @Param('id') taskId: string,
   ): Promise<Response> {
-    const { userId: id } = req.user;
-
     const taskExists = await this.taskRepository.findById(parseInt(taskId));
 
     if (!taskExists) {
