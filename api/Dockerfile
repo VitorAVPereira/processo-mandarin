@@ -1,4 +1,4 @@
-FROM node:18-alpine3.21
+FROM node:23-alpine
 
 WORKDIR /app
 
@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3003
+EXPOSE 3001
