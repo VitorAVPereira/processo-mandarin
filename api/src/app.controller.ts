@@ -58,8 +58,9 @@ export class AppController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('tasks')
-  async getTasks(@Response() res): Promise<Response> {
-    const result = await this.taskRepository.get();
+  async getTasks(@Request() req, @Response() res): Promise<Response> {
+    const userId = req.user.userId;
+    const result = await this.taskRepository.get(userId);
     return res.status(200).json(result);
   }
 

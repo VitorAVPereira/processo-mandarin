@@ -3,7 +3,7 @@ import { PrismaService } from 'src/services/prisma/index.service';
 
 @Injectable()
 export class TaskRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(data: any) {
     return this.prisma.task.create({
@@ -18,10 +18,11 @@ export class TaskRepository {
     });
   }
 
-  async get() {
-    return this.prisma.task.findMany({
+  async get(userId: number) {
+    return this.prisma.task.findMany(
+      {
       where: {
-        solved: false,
+          createdBy: userId,
       },
       include: {
         created_by: {
@@ -30,7 +31,8 @@ export class TaskRepository {
           },
         },
       },
-    });
+      }
+    );
   }
 
   async update(id: number, data: any) {
