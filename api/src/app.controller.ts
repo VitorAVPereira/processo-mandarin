@@ -20,7 +20,7 @@ export class AppController {
     private readonly authService: JwtAuthService,
     private readonly taskRepository: TaskRepository,
     private readonly userRepository: UserRepository,
-  ) {}
+  ) { }
 
   @Post('login')
   async login(@Request() req, @Response() res): Promise<Response> {
@@ -31,7 +31,7 @@ export class AppController {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    if (password === user.password) {
+    if (password !== user.password) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
