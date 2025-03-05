@@ -21,7 +21,7 @@ export default function TasksPage() {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch('http://localhost:3003/tasks', {
+      const response = await fetch('http://localhost:3001/tasks', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -47,7 +47,10 @@ export default function TasksPage() {
       solved: false,
     }
 
-    await fetch('http://localhost:3003/task', {
+    if (task.name.trim() === "" || task.scheduled_for.trim() === "") {
+      alert('Preencha todos  os campos da nova tarefa!')
+    } else {
+      await fetch('http://localhost:3001/task', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +63,7 @@ export default function TasksPage() {
   }
 
   const toggleTask = async (taskId: number) => {
-    const response = await fetch(`http://localhost:3003/task/${taskId}`, {
+    const response = await fetch(`http://localhost:3001/task/${taskId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
