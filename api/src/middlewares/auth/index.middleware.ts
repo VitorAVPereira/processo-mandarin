@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
-import { JwtStrategy } from 'src/auth/jwt.strategy';
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
@@ -25,8 +24,6 @@ export class JwtMiddleware implements NestMiddleware {
 
     try {
       const decoded = this.jwtService.verify(token, { secret: 'secretKey' });
-      const jtwStrategy = new JwtStrategy();
-      jtwStrategy.validate(decoded);
       req.user = decoded;
       next();
     } catch (err) {
