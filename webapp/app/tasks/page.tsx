@@ -18,6 +18,7 @@ export default function TasksPage() {
   const [newTask, setNewTask] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
   const [taskInputs, setTaskInputs] = useState<{ [key: number]: string }>({})
+  const [selectedTask, setSelectedTask] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -74,10 +75,8 @@ export default function TasksPage() {
       }),
     })
 
-    if (response.ok) {
-      setTasks(tasks.map((task) => (task.id === taskId ? { ...task, solved: !task.solved } : task)))
-    } else {
-      alert('Falha ao atualizar a tarefa')
+    if (!response.ok) {
+      alert(`Falha ao atualizar a tarefa ${taskId}`)
     }
   }
 
@@ -141,27 +140,43 @@ export default function TasksPage() {
               <Plus size={20} />
               Add Task
             </button>
+            {selectedTask && (
+              <div>
+                <button
+                  onClick={() => toggleTask(selectedTask)}
+                  className="bg-[#E4003F] text-white px-4 py-2 rounded-md hover:bg-[#E4003F]/90 transition-colors flex items-center gap-2"
+                >
+                  <Check size={20} />
+                  Mark as done
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
             {tasks.map((task) => (
               <div
                 key={task.id}
-                className="flex items-center gap-4 p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                className={task.solved ? "flex items-center gap-4 p-4 bg-green-50 rounded-md hover:bg-green-100 transition-colors" : "flex items-center gap-4 p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"}
               >
+                {!task.solved && (
                 <input
                   type="checkbox"
-                  checked={task.solved}
-                  onChange={() => toggleTask(task.id)}
+                    checked={selectedTask === task.id}
+                    onChange={() => setSelectedTask(task.id)}
                   className="h-5 w-5 rounded border-gray-300 text-[#E4003F] focus:ring-[#E4003F]"
                 />
+                )}
                 <div className="flex-1">
                   <div className="flex">
                     <span className="text-gray-400">
-                      ({task.created_by!.name})&nbsp;
+                      ({task.created_by.name}) -&nbsp;
+                    </span>
+                    <span className="text-gray-700">
+                      ({task.name})&nbsp;
                     </span>
                     <input
-                      className={`font-medium focus:outline-none flex-grow ${task.solved ? "line-through text-gray-400" : "text-gray-900"} bg-transparent`}
+                      className={`font-medium flex-grow px-2 ${task.solved ? "text-gray-400" : "text-gray-900"} border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E4003F]`}
                       type="text"
                       value={taskInputs[task.id] || ""}
                       onChange={(e) => handleTaskInputChange(task.id, e.target.value)}
@@ -174,7 +189,15 @@ export default function TasksPage() {
                       }}
                     />
                   </div>
-                  <p className="text-sm text-gray-500">{task.scheduled_for}</p>
+                  {task.solved ? (
+                    <p className="text-sm text-gray-500">
+                      The task is done! Scheduled for: {task.scheduled_for}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      Task scheduled for: {task.scheduled_for}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
