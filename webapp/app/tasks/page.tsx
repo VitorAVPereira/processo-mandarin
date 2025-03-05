@@ -61,6 +61,8 @@ export default function TasksPage() {
     })
     
     alert('Tarefa adicionada com sucesso!')
+      window.location.reload();
+    }
   }
 
   const toggleTask = async (taskId: number) => {
